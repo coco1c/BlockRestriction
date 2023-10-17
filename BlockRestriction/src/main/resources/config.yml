@@ -1,0 +1,151 @@
+# Config BlockRestriction v1.0.0 by coco
+# Project start: 11-07-2023
+# Tested with: paper-1.20.1-71
+#
+# --======================--
+#   commands & permissions
+# --======================--
+# OP overrides all permissions.
+# (!) main command: /blockrestriction, alias: /bp
+# PERMISSIONS                           COMMAND                                         USAGE
+# blockrestriction.cmd                  /bp                                             Main command
+# blockrestriction.menu                 /bp menu                                        Opens up the GUI menu
+# blockrestriction.explosions           /bp explosions <true/false> <region>            Allow/deny explosions for region
+# blockrestriction.wand                 /bp wand                                        Region creation tool
+# blockrestriction.tp                   /bp tp <region>                                 Teleport to region
+# blockrestriction.create               /bp create <region>                             Creates a region
+# blockrestriction.remove               /bp remove <region>                             Removes a region
+# blockrestriction.select               /bp select <region>                             Selects a region
+# blockrestriction.allow-block-placing  /bp allow-block-placing <true/false> <player>   Allow block placing
+# blockrestriction.allow-block-breaking /bp allow-block-breaking <true/false> <player>  Allow block breaking
+# blockrestriction.set-block            /bp set-block <action> <player>                 Allow/deny certain blocks
+# blockrestriction.set-player           /bp set-player <action> <player>                Allow/deny player region entering
+#
+# What is <action> in set-block command?
+# it represents one of the values: allow-BREAK, allow-PLACE, deny-BREAK, deny-PLACE
+#
+# what is <action> in set-player command?
+# it represents one of the values: allow-ENTER, deny-ENTER
+#
+# Happy configuring!
+
+# --================--
+#   command messages
+# --================--
+messages:
+
+  # command /bp or /blockrestriction
+  cmd-blockrestriction:
+    - "&eBlockRestriction"
+    - "&e{line:50}"
+    - "&7» &f/bp - #aaaaaaMain command"
+    - "&7» &f/bp menu - #eeeeeeOpens up the GUI menu"
+    - "&7» &f/bp wand - #aaaaaaRegion creation tool"
+    - "&7» &f/bp tp <region> - #eeeeeeTeleport to region."
+    - "&7» &f/bp create <region> - #aaaaaaCreates a region"
+    - "&7» &f/bp remove <region> - #eeeeeeRemoves a region"
+    - "&7» &f/bp select <region> - #aaaaaaSelects a region"
+    - "&7»------"
+    - "&7Allow specific block placing & breaking:"
+    - "&7» &f/bp allow-block-placing <true/false> <player>"
+    - "&7» &f/bp allow-block-breaking <true/false> <player>"
+    - " "
+    - "&7Allow/deny certain blocks and player region entering"
+    - "&7» &f/bp set-block <block> <action> <player>"
+    - "&7» &f/bp set-player <action> <player>"
+    - "&e{line:50}"
+
+  # no permission message
+  no-permission: "&7» &cMissing permissions: &7'&f{permission}&7'&f."
+
+  # subcommand wand
+  cmd-wand-give: "&7» &fWand was added to your inventory!"
+  cmd-wand-region-select: "&7» &fPoint &f'&e{point}&f' selected &7(&e{x}&7, &e{y}&7, &e{z}&7)"
+
+  # subcommand tp
+  cmd-tp-usage: "&eUsage: &f/bp tp &7<region-name>"
+  cmd-tp-ok: "&7» &fYou have teleported to region &7'&e{region}&7'&f!"
+  cmd-tp-doesnt-exist: "&7» &fRegion with name &f'&e{region}&f' does not exist."
+  cmd-tp-invalid-format: "&7» &fPlease use only &calphanumeric names&f."
+
+  # subcommand create
+  cmd-create-usage: "&eUsage: &f/bp create &7<region-name>"
+  cmd-create-ok: "&7» &fRegion &f'&e{region}&f' created and selected."
+  cmd-create-already-exists: "&7» &fRegion with name &f'&e{region}&f' already exists."
+  cmd-create-no-selection: "&7» &fPlease select the region bounds &7with the tool &ffirst!"
+  cmd-create-invalid-format: "&7» &fPlease use only &calphanumeric names&f."
+  cmd-create-interference: "&7» &fRegion cannot be created as it is interfering with other regions: &7'&e{regions}&7'&f."
+
+  # subcommand remove
+  cmd-remove-usage: "&eUsage: &f/bp remove &7<region-name>"
+  cmd-remove-ok: "&7» &fRegion &f'&e{region}&f' removed."
+  cmd-remove-doesnt-exist: "&7» &fRegion with name &f'&e{region}&f' does not exist."
+  cmd-remove-invalid-format: "&7» &fPlease use only &calphanumeric names&f."
+
+  # subcommand select
+  cmd-select-usage: "&eUsage: &f/bp select &7<region-name>"
+  cmd-select-ok: "&7» &fRegion &f'&e{region}&f' selected."
+  cmd-select-doesnt-exist: "&7» &fRegion with name &f'&e{region}&f' does not exist."
+  cmd-select-invalid-format: "&7» &fPlease use only &calphanumeric names&f."
+
+  # subcommand allow-block-placing
+  cmd-allow-block-placing-usage: "&eUsage: &f/bp allow-block-placing <true/false> &7<player>"
+  cmd-allow-block-placing-ok: "&7» &eBlock &7placing &fset to {state-color} &fin region &7'&e{region}&7'&f for &e{selected-player}&f."
+  cmd-allow-block-placing-invalid-player: "&7» Player &7'{player}&7'&f is not offline/online!"
+  cmd-allow-block-placing-no-region: "&7» Please select the region first: &e/bp select <region>"
+  placing-message: "&7» &fYou're not allowed to place blocks in region &7'&e{region}&7'&f."
+
+  # subcommand allow-block-breaking
+  cmd-allow-block-breaking-usage: "&eUsage: &f/bp allow-block-breaking <true/false> &7<player>"
+  cmd-allow-block-breaking-ok: "&7» &fBlock &7breaking &fset to {state-color} &fin region &7'&e{region}&7'&f for &e{selected-player}&f."
+  cmd-allow-block-breaking-invalid-player: "&7» Player &7'{player}&7'&f is not offline/online!"
+  cmd-allow-block-breaking-no-region: "&7» Please select the region first: &e/bp select <region>"
+  breaking-message: "&7» &fYou're not allowed to break blocks in region &7'&e{region}&7'&f."
+
+  # subcommand set-player
+  cmd-set-player-usage: "&eUsage: &f/bp set-player <true/false> &7<player>"
+  cmd-set-player-ok: "&7» &fSet &eentering state &fto {state-color} &fin region &7'&e{region}&7'&f for &e{selected-player}&f."
+  cmd-set-player-invalid-player: "&7» Player &7'{player}&7'&f is not offline/online!"
+  cmd-set-player-no-region: "&7» Please select the region first: &e/bp select <region>"
+  # entering messages, when player tries to enter a region but is not allowed
+  entering-message: "&7» &fYou're not allowed to enter the region &7'&e{region}&7'&f."
+  entering-message-top: "&7» &fYou're not allowed to enter the region &7'&e{region}&7'&f. You've been teleported to a random location around the region!"
+  # when player joins and is in region that they should not be in
+  entering-message-evacuated: "&7» &fYou're been evacuated out of the region &7'&e{region}&7' &fsince you're not allowed to be in it anymore."
+
+  # subcommand set-block
+  cmd-set-block-usage: "&eUsage: &f/bp set-block <true/false> &7<player>"
+  cmd-set-block-ok: "&7» &fBlock &7'&e{block}&7' &fset to {state-color} &fin region &7'&e{region}&7'&f for &e{selected-player}&f."
+  cmd-set-block-invalid-player: "&7» Player &7'{player}&7'&f is not offline/online!"
+  cmd-set-block-invalid-block: "&7» Block of type &7'{block-type}&7'&f does not exist."
+  cmd-set-block-no-region: "&7» Please select the region first: &e/bp select <region>"
+
+  # when player is denied to place/break a specifc block and will trigger these messages
+  breaking-specific-block-message: "&7» &fYou're not allowed to break a block &7'&e{block}&7' &fin region &7'&e{region}&7'&f."
+  placing-specific-block-message: "&7» &fYou're not allowed to place a block &7'&e{block}&7' &fin region &7'&e{region}&7'&f."
+
+  # subcommand menu
+  cmd-menu: "&7» &7This feature will be included in version &a1.0.1!"
+
+  # subcommand explosions
+  cmd-explosions-usage: "&eUsage: &f/bp explosions <true/false> &7<region>"
+  cmd-explosions-ok: "&7» &fExplosions for region &7'&e{region}&7' &fset to {state-color}&f."
+  cmd-explosions-no-region: "&7» Please select the region first: &e/bp select <region>"
+
+# --========--
+#   settings
+# --========--
+settings:
+
+  # settings for the wand item, /bp wand
+  # wand item type is STONE_AXE
+  wand:
+
+    # display name of an item
+    display-name: "&eBlockRestriction Wand Item"
+
+    # lore
+    lore:
+      - "&f» &eSelect the region."
+      - "&fPosition &eA &f- LEFT click"
+      - "&fPosition &eB &f- RIGHT click"

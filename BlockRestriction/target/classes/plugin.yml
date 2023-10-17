@@ -1,0 +1,10 @@
+name: BlockRestriction
+description: Restrict players & blocks from being in regions!
+version: 1.0.0
+api-version: 1.17
+main: com.coco.Main.Main
+author: coco
+commands:
+  blockrestriction:
+    aliases: [bp]
+    description: See all plugin commands
